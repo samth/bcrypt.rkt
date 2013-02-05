@@ -28,12 +28,15 @@
 ;; we accept both a and y prefixes
 (define bcrypt-re #px#"\\$2[ay]\\$[0-9]{2}\\$[./A-Za-z0-9]{53}")
 
+;; get n random bits from /dev/urandom
+(define (urandom n)
+  (unless (file-exists? "/dev/urandom")
+    (error 'bcrypt "/dev/urandom needed for random seed generation"))
+  (with-input-from-file "/dev/urandom"
+    (lambda () (read-bytes 16))))
+
 (define (encode bs #:rounds [rounds _rounds])
-  (define settings 
-    (crypt_gensalt_rn 
-     PREFIX rounds 
-     ;; FIXME -- use OS-level randomness
-     (list->bytes (for/list ([_ 16]) (random 8)))))
+  (define settings (crypt_gensalt_rn PREFIX rounds (urandom 16)))
   (unless settings (error 'encode "crypt_gensalt_rn failure"))
   (define result (crypt_rn bs settings))
   (unless result (error 'encode "crypt_rn failure"))
