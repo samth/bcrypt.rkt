@@ -1,9 +1,11 @@
 #lang racket/base
 
-(require ffi/unsafe ffi/unsafe/define)
+(require ffi/unsafe ffi/unsafe/define racket/runtime-path)
 (provide encode check match)
 
-(define-ffi-definer define-crypt (ffi-lib "libcrypt_blowfish"))
+(define-runtime-path lib-path "libcrypt_blowfish")
+
+(define-ffi-definer define-crypt (ffi-lib lib-path))
 
 ;; These constants taken directly from the source
 (define CRYPT_OUTPUT_SIZE		(+ 7 22 31 1))
