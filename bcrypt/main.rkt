@@ -50,10 +50,8 @@
 (define (match bs) (regexp-match bcrypt-re bs))
 
 (module+ test
-         (crypt_gensalt_rn PREFIX _rounds (list->bytes (for/list ([_ 16]) (random 8))))
+         (require (except-in rackunit check))
          
-         (define one (encode #"foo"))
-         (define two (time (check one #"foo")))
-         
-         one two
-         (check one #"fooo"))
+         (define encoded (encode #"foo"))
+         (check-true (check encoded #"foo"))
+         (check-false (check encoded #"fooo")))
