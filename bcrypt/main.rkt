@@ -1,6 +1,7 @@
 #lang racket/base
 
 (require ffi/unsafe ffi/unsafe/define)
+(provide encode check match)
 
 (define-ffi-definer define-crypt (ffi-lib "libcrypt_blowfish"))
 
