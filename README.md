@@ -1,5 +1,12 @@
 A Racket interface to bcrypt
 ===============================
 
-Include the c sources for a version of `bcrypt`, which must first be built.
+This is derived from bcrypt interface from the Python 'cryptacular'
+library by Daniel Holth, available here: https://bitbucket.org/dholth/cryptacular/
+
+Includes the C sources for a version of `bcrypt`, which must first be
+built.  The version of bcrypt is by Solar Designer, and is available
+here: http://www.openwall.com/crypt/
+
+Available under the MIT license.
 

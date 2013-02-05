@@ -3,3 +3,4 @@
 *.h
 libcrypt_blowfish.so
 *.o
+compiled/
