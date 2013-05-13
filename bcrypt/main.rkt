@@ -1,11 +1,21 @@
 #lang racket/base
 
-(require ffi/unsafe ffi/unsafe/define racket/runtime-path)
+(require ffi/unsafe ffi/unsafe/define
+         racket/format racket/runtime-path)
 (provide encode check match)
 
 (define-runtime-path lib-path "libcrypt_blowfish")
+(define-runtime-path here ".")
 
-(define-ffi-definer define-crypt (ffi-lib lib-path))
+(define (bcrypt-err)
+  (error (~a "bcrypt: Could not open shared object file. "
+             "Try running 'make' in "
+             here)))
+
+(define bcrypt-lib
+  (ffi-lib lib-path #:fail bcrypt-err))
+
+(define-ffi-definer define-crypt bcrypt-lib)
 
 ;; These constants taken directly from the source
 (define CRYPT_OUTPUT_SIZE		(+ 7 22 31 1))
