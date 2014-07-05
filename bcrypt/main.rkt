@@ -46,7 +46,7 @@
   (unless (file-exists? "/dev/urandom")
     (error 'bcrypt "/dev/urandom needed for random seed generation"))
   (with-input-from-file "/dev/urandom"
-    (lambda () (read-bytes 16))))
+    (lambda () (read-bytes n))))
 
 (define (encode bs #:rounds [rounds _rounds])
   (define settings (crypt_gensalt_rn PREFIX rounds (urandom 16)))
