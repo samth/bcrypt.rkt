@@ -1,19 +1,16 @@
 #lang racket/base
 
-(require ffi/unsafe ffi/unsafe/define
-         racket/format racket/runtime-path)
+(require ffi/unsafe ffi/unsafe/define racket/format)
 (provide encode check match)
 
-(define-runtime-path lib-path "libcrypt_blowfish")
-(define-runtime-path here ".")
+(define (local-lib-dirs)
+  (list (build-path (collection-path "bcrypt")
+		    "private"
+		    "compiled"
+		    "native"
+		    (system-library-subpath))))
 
-(define (bcrypt-err)
-  (error (~a "bcrypt: Could not open shared object file. "
-             "Try running 'make' in "
-             here)))
-
-(define bcrypt-lib
-  (ffi-lib lib-path #:fail bcrypt-err))
+(define bcrypt-lib (ffi-lib "libcrypt_blowfish" #:get-lib-dirs local-lib-dirs))
 
 (define-ffi-definer define-crypt bcrypt-lib)
 
@@ -67,7 +64,7 @@
 
 (module+ test
          (require (except-in rackunit check))
-         
+
          (define encoded (encode #"foo"))
          (check-true (check encoded #"foo"))
          (check-false (check encoded #"fooo")))
