@@ -23,20 +23,20 @@
     (define shared-object-target (build-path shared-object-target-path
 					     (append-extension-suffix "libcrypt_blowfish")))
 
-    (when (not (file-exists? shared-object-target))
-      (define c-sources
-        (for/list ((c (list "crypt_blowfish.c"
-                            "crypt_gensalt.c"
-                            "wrapper.c")))
-          (build-path unpacked-path c)))
+    (when (file-exists? shared-object-target) (delete-file shared-object-target))
+    (define c-sources
+      (for/list ((c (list "crypt_blowfish.c"
+                          "crypt_gensalt.c"
+                          "wrapper.c")))
+        (build-path unpacked-path c)))
 
-      (make-directory* shared-object-target-path)
-      (parameterize ((current-extension-linker-flags
-		      (append (current-extension-linker-flags)
-			      (list "-O2" "-fomit-frame-pointer" "-funroll-loops"
-                                    "-DNO_BF_ASM"
-				    "-I" (path->string unpacked-path)
-				    ))))
-	(link-extension #f ;; not quiet
-			c-sources
-			shared-object-target)))))
+    (make-directory* shared-object-target-path)
+    (parameterize ((current-extension-linker-flags
+                    (append (current-extension-linker-flags)
+                            (list "-O2" "-fomit-frame-pointer" "-funroll-loops"
+                                  "-DNO_BF_ASM"
+                                  "-I" (path->string unpacked-path)
+                                  ))))
+      (link-extension #f ;; not quiet
+                      c-sources
+                      shared-object-target))))
