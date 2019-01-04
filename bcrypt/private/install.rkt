@@ -35,8 +35,8 @@
                     (append (current-extension-linker-flags)
                             (list "-O2" "-fomit-frame-pointer" "-funroll-loops"
                                   "-DNO_BF_ASM"
-                                  "-I" (path->string unpacked-path)
-                                  ))))
+                                  "-I" (path->string unpacked-path))))
+                   [current-use-mzdyn #f])
       (link-extension #f ;; not quiet
                       c-sources
                       shared-object-target))))
