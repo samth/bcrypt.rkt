@@ -8,7 +8,7 @@
 		    "private"
 		    "compiled"
 		    "native"
-		    (system-library-subpath))))
+		    (system-library-subpath #f))))
 
 (define bcrypt-lib (ffi-lib "libcrypt_blowfish" #:get-lib-dirs local-lib-dirs))
 
