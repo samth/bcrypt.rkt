@@ -19,7 +19,7 @@
     (define shared-object-target-path (build-path private-path
 						  "compiled"
 						  "native"
-						  (system-library-subpath)))
+						  (system-library-subpath #f)))
     (define shared-object-target (build-path shared-object-target-path
 					     (append-extension-suffix "libcrypt_blowfish")))
 
