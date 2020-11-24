@@ -6,11 +6,11 @@
          racket/runtime-path)
 (provide encode check match)
 
-(define-runtime-path libcrypto_blowfish
+(define-runtime-path libcrypt_blowfish
   '(so "libcrypt_blowfish"))
 
 (define-ffi-definer define-crypt
-  (ffi-lib libcrypto_blowfish))
+  (ffi-lib libcrypt_blowfish))
 
 ;; These constants taken directly from the source
 (define CRYPT_OUTPUT_SIZE		(+ 7 22 31 1))
