@@ -1,11 +1,8 @@
 #lang racket/base
 
-(require racket/system)
-(require racket/file)
-(require dynext/file)
-(require dynext/link)
-
-(require file/untgz)
+(require dynext/file
+         dynext/link
+         setup/dirs)
 
 (provide pre-installer)
 
@@ -16,12 +13,9 @@
 
   (parameterize ((current-directory private-path))
     (define unpacked-path (build-path private-path SOURCEDIR))
-    (define shared-object-target-path (build-path private-path
-						  "compiled"
-						  "native"
-						  (system-library-subpath #f)))
-    (define shared-object-target (build-path shared-object-target-path
-					     (append-extension-suffix "libcrypt_blowfish")))
+    (define shared-object-target
+      (build-path (find-lib-dir)
+                  (append-extension-suffix "libcrypt_blowfish")))
 
     (when (file-exists? shared-object-target) (delete-file shared-object-target))
     (define c-sources
@@ -30,7 +24,6 @@
                           "wrapper.c")))
         (build-path unpacked-path c)))
 
-    (make-directory* shared-object-target-path)
     (parameterize ((current-extension-linker-flags
                     (append (current-extension-linker-flags)
                             (list "-O2" "-fomit-frame-pointer" "-funroll-loops"
