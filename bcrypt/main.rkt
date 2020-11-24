@@ -1,24 +1,22 @@
 #lang racket/base
 
-(require ffi/unsafe ffi/unsafe/define racket/format)
+(require (for-syntax racket/base)
+         ffi/unsafe
+         ffi/unsafe/define
+         racket/runtime-path)
 (provide encode check match)
 
-(define (local-lib-dirs)
-  (list (build-path (collection-path "bcrypt")
-		    "private"
-		    "compiled"
-		    "native"
-		    (system-library-subpath #f))))
+(define-runtime-path libcrypto_blowfish
+  '(so "libcrypt_blowfish"))
 
-(define bcrypt-lib (ffi-lib "libcrypt_blowfish" #:get-lib-dirs local-lib-dirs))
-
-(define-ffi-definer define-crypt bcrypt-lib)
+(define-ffi-definer define-crypt
+  (ffi-lib libcrypto_blowfish))
 
 ;; These constants taken directly from the source
 (define CRYPT_OUTPUT_SIZE		(+ 7 22 31 1))
 (define CRYPT_GENSALT_OUTPUT_SIZE	(+ 7 22 1))
 
-(define-crypt crypt_rn (_fun _bytes _bytes 
+(define-crypt crypt_rn (_fun _bytes _bytes
                              (out : (_bytes o CRYPT_OUTPUT_SIZE))
                              (_int = CRYPT_OUTPUT_SIZE)
                              -> (r : _int)
