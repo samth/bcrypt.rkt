@@ -16,13 +16,13 @@
 (define CRYPT_OUTPUT_SIZE		(+ 7 22 31 1))
 (define CRYPT_GENSALT_OUTPUT_SIZE	(+ 7 22 1))
 
-(define-crypt crypt_rn (_fun _bytes _bytes
+(define-crypt crypt_rn (_fun _bytes/nul-terminated _bytes
                              (out : (_bytes o CRYPT_OUTPUT_SIZE))
                              (_int = CRYPT_OUTPUT_SIZE)
                              -> (r : _int)
                              -> (if (zero? r) #f out)))
 
-(define-crypt crypt_gensalt_rn (_fun _bytes _long (salt : _bytes)
+(define-crypt crypt_gensalt_rn (_fun _bytes/nul-terminated _long (salt : _bytes)
                                      (_int = (bytes-length salt))
                                      (out : (_bytes o CRYPT_GENSALT_OUTPUT_SIZE))
                                      (_int = CRYPT_GENSALT_OUTPUT_SIZE)
