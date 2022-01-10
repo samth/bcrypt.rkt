@@ -8,13 +8,13 @@
 
 (define SOURCEDIR "crypt_blowfish-1.2")
 
-(define (pre-installer collections-top-path this-collection-path)
+(define (pre-installer collections-top-path this-collection-path user-specific?)
   (define private-path (build-path this-collection-path "private"))
 
   (parameterize ((current-directory private-path))
     (define unpacked-path (build-path private-path SOURCEDIR))
     (define shared-object-target
-      (build-path (find-lib-dir)
+      (build-path (if user-specific? (find-user-lib-dir) (find-lib-dir))
                   (append-extension-suffix "libcrypt_blowfish")))
 
     (when (file-exists? shared-object-target) (delete-file shared-object-target))
