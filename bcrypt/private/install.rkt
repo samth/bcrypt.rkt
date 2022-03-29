@@ -1,6 +1,7 @@
 #lang racket/base
 
-(require dynext/file
+(require racket/file
+         dynext/file
          dynext/link
          setup/dirs)
 
@@ -13,10 +14,12 @@
 
   (parameterize ((current-directory private-path))
     (define unpacked-path (build-path private-path SOURCEDIR))
+    (define lib-path (if user-specific? (find-user-lib-dir) (find-lib-dir)))
     (define shared-object-target
-      (build-path (if user-specific? (find-user-lib-dir) (find-lib-dir))
+      (build-path lib-path
                   (append-extension-suffix "libcrypt_blowfish")))
 
+    (make-directory* lib-path)
     (when (file-exists? shared-object-target) (delete-file shared-object-target))
     (define c-sources
       (for/list ((c (list "crypt_blowfish.c"
