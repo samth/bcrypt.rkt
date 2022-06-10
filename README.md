@@ -8,5 +8,8 @@ Includes the C sources for a version of `bcrypt`, which are compiled
 as part of `raco setup bcrypt`. The version of bcrypt is by Solar Designer,
 and is available here: http://www.openwall.com/crypt/
 
+A C compiler is required at installation time, and is automatically found
+by the `dynext` library.
+
 Available under the MIT license.
 
